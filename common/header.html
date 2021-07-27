@@ -1,0 +1,190 @@
+<!-- learning_step
+unit:        discourse_theme_development.5
+number:      1
+title:       Plugin outlets in script tags
+description: Now that we've had a look at where theme HTML is inserted in the 
+             Rails application layout and the Ember application template, and 
+             what components and plugin outlets are, let's have a look at an 
+             example that uses those concepts.
+
+             One way you can insert HTML into a plugin outlet is by using a 
+             special ``<script>``. It looks like this:
+
+             ```
+             <script type="text/x-handlebars" data-template-name="/connectors/topic-category/more-assignments"></script>
+             ```
+
+             If you insert a script tag with the ``type`` "text/x-handlebars" and
+             with the ``data-template-name`` set according to this scheme below, 
+             the code enclosed in the tag will be interpreted as a handlebars 
+             template to be inserted in the ``plugin_outlet_name`` plugin outlet.
+
+             #### data-template-name scheme
+
+             ```
+             /connectors/<plugin_outlet_name>/<anything>
+             ```
+
+             You can add a script tag like this in the ``head_tag.html`` or 
+             ``body_tag.html`` and it will insert its contents into whatever
+             plugin outlet appears in the ``data-template-name`` attribute.
+
+references:   https://meta.discourse.org/t/32727
+-->
+<!-- /learning_step -->
+
+<!-- learning_step
+unit:        discourse_theme_development.5
+number:      2
+review:      peer
+mark:        pass_change_fail
+title:       Using a plugin outlet in a script tag
+description: Have a look at the script tag in the example below. If you go
+             into a topic on the Theme Creator you'll see what HTML it's adding,
+             just under the topic title.
+
+             See if you can find the plugin outlet it's using in the Discourse 
+             codebase. Rather than just doing a search for the plugin outlet 
+             name (which is what you normally should do), start off by looking 
+             in the ``topic.hbs`` template we looked at in the previous unit. 
+
+             You won't find the plugin outlet in ``topic.hbs``, but see if you
+             can find what component it is in by reading that template, then 
+             find the template for that component. When you're developing a theme 
+             being able to read a template file and then find the templates for 
+             the components it uses is a useful skill.
+
+             Finally, see if you can find the template for the component that's 
+             rendering the button. Don't worry about how that works for now,
+             instead, do a search in the templates folder for other places where 
+             that button template is used in Discourse.
+
+             ```
+             app/assets/javascripts/discourse/app/templates
+             ```
+             ([GitHub link](https://github.com/discourse/discourse/blob/main/app/assets/javascripts/discourse/app/templates))
+
+             See if you can match up other examples of where the button component 
+             is used to buttons you can see in the Discourse UI.
+
+exercise:    Respond in the comments with
+
+             - a link to the component javascript and template containing the
+               plugin outlet being used in the example
+
+             - a link to a place where the button component is used, and a 
+               screenshot of the same button in the UI.
+-->
+<script type="text/x-handlebars" data-template-name="/connectors/topic-category/more-assignments">
+ {{d-button href="/c/school/theme-assignments" translatedLabel="Find more theme assignments"}}
+</script>
+<!-- /learning_step -->
+
+<!-- learning_step
+unit:        discourse_theme_development.5
+number:      3
+review:      peer
+mark:        pass_change_fail
+title:       Configuring the button component
+description: Once you've looked at a few examples of how the button component is
+             used, see if you can do the following just based on those other 
+             examples and some things we covered in the previous units:
+
+             - Add an icon to the button
+
+             - Disable the button
+
+             - Make the button red
+
+             - Make a loading spinner appear on the button
+
+             You'll need to make some educated guesses based off what your search
+             for the component in the templates folder turned up.
+
+exercise:    Respond in the comments with evidence of completing the step's tasks.
+-->
+<!-- /learning_step -->
+
+<!-- learning_step
+unit:        discourse_theme_development.5
+number:      4
+review:      peer
+mark:        pass_change_fail
+title:       Override a template in a script tag
+description: The other aspect of working with templates that you'll often use in
+             a theme is overriding an existing template in Discourse. You can
+             also do this using a special ``<script>`` tag anyhere in the HTML.
+             The code below is overriding the template for the button component 
+             we used in the previous step.
+
+             First, take a look at the ``data-template-name`` attribute. When 
+             overriding a template, we use the following pattern:
+
+             - ``/components/<component_name>`` if it's a component template
+
+             - ``<template_name>`` if it's a page template (e.g. "application", or "topic")
+
+             When you override a template, your code gets applied instead of the 
+             ``discourse`` template. Be careful with this. If you do actually
+             override the ``d-button`` template you're changing the HTML for 
+             nearly every button you see in Discourse!
+
+             But let's give that a go anyway. Change the template override below
+             so that the icon you added to the button in the previous step appears 
+             to the right of the text in the button.
+
+exercise:    Respond in the comments with evidence of completing the step's tasks.
+-->
+<script type="text/x-handlebars" data-template-name="/components/d-button">
+  {{#if icon}}
+    {{#if isLoading}}
+      {{~d-icon "spinner" class="loading-icon"~}}
+    {{else}}
+      {{~d-icon icon~}}
+    {{/if}}
+  {{else}}
+    {{#if isLoading}}
+      {{~d-icon "spinner" class="loading-icon"~}}
+    {{/if}}
+  {{/if}}
+
+  {{~#if computedLabel~}}
+    <span class="d-button-label">{{html-safe computedLabel}}{{#if ellipsis}}&hellip;{{/if}}</span>
+  {{~/if~}}
+
+  {{yield}}
+</script>
+<!-- /learning_step -->
+
+<!-- learning_step
+unit:        discourse_theme_development.5
+number:      5
+title:       Wrapping HTML in a component
+description: Before we move on, take another look at the ``{{yield}}`` block at 
+             the bottom of the ``d-button`` template. What do you think that 
+             does? To get an idea, try changing our ``d-button`` component in 
+             Step 11 to the following:
+
+             ```
+             {{#d-button}}
+               <a href="/c/school/theme-assignments" style="color: black">
+                 Find more theme assignments
+               </a>
+             {{/d-button}}
+             ```
+
+             When you refresh the page in the theme creator the button will look
+             exactly the same as before! But it's actually a bit different. How
+             is it different? Inspect the HTML in your browser to get a sense 
+             of what changes between the two approaches, and what {{yield}} 
+             might be doing there.
+
+             Once you've figured that out, if you're reading this in the theme
+             code, head over to the ``more-assignments.hbs`` file for the next
+             step.
+
+             ```
+             javascripts/discourse/connectors/topic-category/more-assignments.hbs
+             ```   
+-->
+<!-- /learning_step -->

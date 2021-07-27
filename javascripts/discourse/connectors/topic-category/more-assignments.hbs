@@ -1,0 +1,123 @@
+{{!-- learning_step
+unit:        discourse_theme_development.5
+number:      6
+title:       Use the javascripts folder
+description: Using ``<script>`` tags can get a bit messy. Developers typically 
+             like to put their code into a neat file structure with descriptive 
+             names. This makes it easier to understand, both for others, and also 
+             for your future self. When you read code you wrote a year ago it can
+             feel like it was written by someone else. Personally, I never use 
+             ``<script>`` tags when I'm working on a Discourse theme as I find
+             cumbersome to read and work with.
+
+             When you're working HTML in Discourse themes, you can also use a 
+             folder structure with descriptive names, instead of uing ``<script>``
+             tags. There are two things to know about this folder structure for
+             now:
+
+             - how to use plugin outlets; and
+
+             - how to override templates. 
+
+             Both have some relation to the pattern we used in the 
+             ``data-template-name`` attribute in our ``script`` tags. Have a 
+             look at those attributes again, then have a look at the folders this 
+             file is in. See if you can figure out how we use plugin outlets and 
+             override templates using folders instead of ``script`` tags.
+             
+             The short answer is that if we're using the ``javascripts`` folder 
+             we put plugin outlet HTML in
+
+             ```
+             javascripts/discourse/connectors/<plugin_outlet_name>/<anything.hbs>
+             ```
+
+             and we put template overrides in
+
+             ```
+             javascripts/discourse/templates/<page_name.hbs>
+             javascripts/discourse/templates/components/<component_name.hbs>
+             ```
+--}}
+{{!-- /learning_step --}}
+
+{{!-- learning_step
+unit:        discourse_theme_development.5
+number:      7
+title:       Using plugin outlets and template overrides
+description: Remove the Handlebars comments (the ``{{!--`` at the start and the
+             ``--\}}`` at the end of the line) from the component definition below
+             and then refresh your theme creator preview. You should now see two
+             buttons under the topic title. Then, apply the same override of the 
+             ``d-button`` template we did in our ``script`` tag using the 
+             ``javascripts`` folder.
+
+             You might have noticed that we can use the same plugin outlet more 
+             than once either in the same theme, or across different themes.
+             However, we can't override a template more than once in the same 
+             theme or in different themes. If you try to make changes in both the
+             ``script`` and the ``javascripts`` ``d-button`` override you'll 
+             notice that only one of them will work. 
+
+             Which override takes precedence within a theme and between themes 
+             depends on a few factors, which we won't get into here. You should 
+             avoid getting in a double-override scenario in the first place. If 
+             you find your template override isn't working, check that another 
+             theme or plugin isn't attempting to override the same template.
+--}}
+{{!-- {{d-button href=category.topic_url translatedLabel="Find out more about this category"}} --}}
+{{!-- /learning_step --}}
+
+{{!-- learning_step
+unit:        discourse_theme_development.5
+number:      8
+title:       Using plugin outlet arguments
+description: You may have noticed that the button in the example in the previous
+             step is slightly different from its sibling in our ``<script>`` tag.
+
+             Instead of assigning ``href`` to a string, it's using the ``topic_url`` 
+             property on the ``category`` object. Where does the ``category`` 
+             object come from? To answer that question we'll need to go back and 
+             have a look at our ``topic-category`` plugin outlet. Go and find that 
+             plugin outlet again in the ``discourse`` templates. It'll look like 
+             this:
+
+             ```
+             {{plugin-outlet name="topic-category" args=(hash topic=topic category=topic.category)}}
+             ```
+             ([GitHub link](https://github.com/discourse/discourse/blob/main/app/assets/javascripts/discourse/app/templates/topic.hbs))
+
+             The ``args=(hash topic=topic category=topic.category)`` part on the 
+             end is where our ``category`` is coming from. You don't need to know
+             how it works for now, but just know that when you find a plugin outlet
+             look to see if it also has an ``args`` and what those arguments
+             are. You can use them in your HTML you're inserting in the plugin
+             outlet.
+
+             In this case we have both a category object and a topic object. The
+             next question is, how do we know what attributes an object like 
+             ``category`` or ``topic`` has? There's a few ways to figure that 
+             out, but the best way at this point in our learning is to take a 
+             look at the relevant object in the ``.json`` API, either directly 
+             on a forum, or in the Discourse API Docs. 
+
+             You'll find a link to the ``category`` definition in the API docs 
+             in the references. To see an object on a forum using the json API 
+             stick ``.json`` at the end of the url that loads the object. For 
+             example you'll see the attributes of the Theme Creator's categories 
+             if you load this url in your browser
+
+             ```
+             https://theme-creator.discourse.org/categories.json
+             ```
+
+             You'll see in the browser that the ``topic_url`` for a categeory 
+             contains the path to its "About" topic.
+
+             When you've finihed investigating the category and topic objects,
+             if you're reading this in the theme code head over to the FINISH 
+             file for your final unit assignment.
+
+references:  https://docs.discourse.org/#tag/Categories/paths/~1c~1{id}~1show.json/get
+--}}
+{{!-- /learning_step --}}
