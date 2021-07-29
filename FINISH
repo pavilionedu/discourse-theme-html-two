@@ -1,6 +1,23 @@
 # learning_step
 # unit:         discourse_theme_development.5
 # number:       9
+# review:       peer
+# mark:         pass_change_fail
+# title:        Unit Exercise
+# exercise:     Using the knowledge we've gained about working with HTML in
+#               Discourse Themes, complete the following three tasks.
+#
+# exercise:     1. Add a header bar that appears above the normal discourse header.
+#
+#               2. On the left of the header add a flat button with an icon on 
+#                  it (and no text).
+#
+#               3. On the right of the header make the current user's avatar appear.
+# /learning_step
+
+# learning_step
+# unit:         discourse_theme_development.5
+# number:       10
 # visibility:   hidden:until_steps_completed
 # title:        Unit Video
 # description:  This is where video demonstrating how to complete the unit goes

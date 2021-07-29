@@ -32,8 +32,6 @@
 #               in the theme folder in your code editor to see all the steps in 
 #               the unit. All units start in the START file and end in the 
 #               FINISH file.
-#
-#               If you're reading this in the unit theme code, go to ``common/header.html``
-#               for the next step.
 # references:   https://github.com/pavilionedu/discourse-theme-html-two
+# next_step:    common/header.html
 # /learning_unit
