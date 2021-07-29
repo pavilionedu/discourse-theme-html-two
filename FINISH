@@ -4,7 +4,7 @@
 # review:       peer
 # mark:         pass_change_fail
 # title:        Unit Exercise
-# exercise:     Using the knowledge we've gained about working with HTML in
+# description:  Using the knowledge we've gained about working with HTML in
 #               Discourse Themes, complete the following three tasks.
 #
 # exercise:     1. Add a header bar that appears above the normal discourse header.
